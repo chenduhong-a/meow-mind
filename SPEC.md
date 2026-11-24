@@ -1174,4 +1174,4 @@ try {
 
 **改源码的定位**：`C:\deepseek\work\meow-mind` 是正本，`C:\Users\ZQY\.dsh\profiles\desktop\node_modules\meow-mind` 是安装副本；改完同步、**完全退出宿主重开**才在工具面生效。回退用 `git restore`，不许模型重写一份「看着一样」的。
 
-**远端未配**：要推要凑三样——自己的仓库、认证（PAT 或 SSH key）、修掉 `~\.gitconfig` 里那条指向 7897 的死代理（`git -c http.proxy= ls-remote` 可绕，2026-11-24 实测 HEAD `4705e4e8`）。
+**远端已配（2026-11-24 首推）**：`github.com/chenduhong-a/meow-mind`（私有，`main` 已追 `origin/main`）。推送命令必须带 `-c http.proxy=`——`~\.gitconfig` 里那条指向 `127.0.0.1:7897` 的代理已失效，不加会报 schannel 握手失败；凭据走系统级 `credential.helper=manager`。`test/fixtures-memories.json` 与 `models/` 被 `.gitignore` 挡住，远端只有源码。
