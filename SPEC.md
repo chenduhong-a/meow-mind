@@ -1160,3 +1160,18 @@ try {
 **冲突扫描**：`findConflicts` 查三类——同一子节内「不要」与「倾向」并存、`no-` 前缀 topic 与肯定句并存、字面重复。当前 0 处。冲突**不自动改**，由 `/dream` 报给用户决定保留哪条。
 
 **已知边界**：①`/dream run` 的**自动归纳还没做**——目前只能手动 `memory_profile upsert`；②没有 UI（侧边栏只有记忆审议页，画像还看不到）；③画像与 `user` 层的关系是「结论 vs 证据」，删 `user` 记忆不会自动改画像，两者要靠 dream 对账。
+
+---
+
+## §14 源码基线（2026-11-24）
+
+`C:\deepseek\work\meow-mind` 自 2026-11-24 起是本地 git 仓库：`main` 分支、36 个跟踪文件、初始提交 `78d2716`、`.git` 0.21 MB。
+
+**刻意不进仓库的三样**（见 `.gitignore`）：
+- `models/`（98.1 MB，Xenova bge-base-zh-v1.5 的 onnx 模型，可重下）
+- `node_modules/`
+- `test/fixtures-memories.json`（**真实记忆导出，含个人内容**——它被 `test/embed-eval.mjs` 当夹具用，但里面是用户真实记忆，绝不能推到远端；要换就现从本地库导出）
+
+**改源码的定位**：`C:\deepseek\work\meow-mind` 是正本，`C:\Users\ZQY\.dsh\profiles\desktop\node_modules\meow-mind` 是安装副本；改完同步、**完全退出宿主重开**才在工具面生效。回退用 `git restore`，不许模型重写一份「看着一样」的。
+
+**远端未配**：要推要凑三样——自己的仓库、认证（PAT 或 SSH key）、修掉 `~\.gitconfig` 里那条指向 7897 的死代理（`git -c http.proxy= ls-remote` 可绕，2026-11-24 实测 HEAD `4705e4e8`）。
