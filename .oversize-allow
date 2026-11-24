@@ -1,0 +1,4 @@
+# 历史超限文件，下次改动前先按功能拆分
+src/tools.mjs
+src/store.mjs
+src/index.mjs
