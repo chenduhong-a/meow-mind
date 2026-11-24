@@ -56,6 +56,9 @@ export async function createEmbedder(cfg, logger) {
   let ready = false;
   const api = {
     ready: () => ready,
+    // 「还能尝试」而不是「已就绪」：懒加载下模型未载也算可用，
+    // 失败一次才置 false（load() 里 failed 锁）。health 与检索预判都用它。
+    available: () => !failed,
     async embed(text) {
       const ex = await load(cfg, logger);
       if (ex === null) return null;

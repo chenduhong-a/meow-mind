@@ -122,7 +122,7 @@ export async function apply(ctx, rawConfig) {
     readCfg,
     embed,
     getEmbedder: () => embedder,
-    embeddingReady: () => embedder !== null,
+    embeddingReady: () => embedder !== null && embedder.available?.() !== false,
     // 工作区信箱要 <cwd>/.dsh-mind/mailbox，cwd 由这里注入（2026-11-23）
     cwd: () => lastCwd
   });
