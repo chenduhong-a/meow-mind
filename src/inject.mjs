@@ -1,4 +1,6 @@
 // 注入块构建：首轮（长期记忆 + 准则）与每消息（命中摘要）。
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { listMemories, allVectors } from './store.mjs';
 import { fusedSearch, bm25Candidates, cosine } from './bm25.mjs';
 import { l0, l1 } from './summary.mjs';
@@ -6,6 +8,30 @@ import { buildBriefNarrative } from './profile.mjs';
 import { mailboxStats, listLetters } from './mailbox.mjs';
 import { docIndexLine } from './docs.mjs';
 import { findPersona, listTraits, currentSituation } from './timeline.mjs';
+
+/**
+ * 当前 profile 里是否还装着 meow-memory：两者注册同名 memory_* 工具，
+ * 同一 profile 下互相顶掉（工具面只剩后加载的那个）。装了就在首轮块里明说，
+ * 不让检索静默换实现。
+ *
+ * 只查 DSH_PROFILE_DIR：遍历 $DSH_HOME/profiles 下所有 profile 会把别的
+ * profile 的安装误报成本 profile 的问题（2026-11-24 修正）。
+ */
+export function detectSiblingMemory() {
+  try {
+    const dir = process.env.DSH_PROFILE_DIR;
+    if (!dir) return null;
+    const pkgPath = join(dir, 'package.json');
+    if (!existsSync(pkgPath)) return null;
+    const deps = JSON.parse(readFileSync(pkgPath, 'utf8'))?.dependencies ?? {};
+    const v = deps['meow-memory'];
+    if (!v) return null;
+    const profile = process.env.DSH_PROFILE || dir.split(/[\\/]/).pop() || 'unknown';
+    return { profile, version: String(v) };
+  } catch {
+    return null; /* 读不到不影响注入 */
+  }
+}
 
 /** CJK 感知的 token 估算：中文 1.5，其余 0.3。 */
 export function estimateTokens(text) {
@@ -199,6 +225,23 @@ export function buildFirstTurnBlock(db, cfg, globalDb = null, selfCode = '', sel
     }
   } catch {
     /* 信箱坏了不影响记忆注入 */
+  }
+
+  // 同 profile 装着 meow-memory 时工具会互相顶掉：明说出来，别让检索静默换实现。
+  try {
+    const sibling = detectSiblingMemory();
+    if (sibling) {
+      const block = `\n## 环境警告\n检测到同 profile（${sibling.profile}）还装着 meow-memory@${sibling.version}：两者注册同名 memory_* 工具会互相顶掉，请先卸载 meow-memory 再重启。`;
+      const cost = estimateTokens(block);
+      if (used + cost <= budget) {
+        lines.push(block);
+        used += cost;
+      } else {
+        dropped.push('环境警告');
+      }
+    }
+  } catch {
+    /* 检测失败不影响注入 */
   }
 
   if (lines.length === 0) return null;

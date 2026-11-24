@@ -22,15 +22,17 @@
   },
   "peerDependencies": {
     "@deepseek-ai/dsh-llm": "*",
-    "@deepseek-ai/schemastery": "^3.18.1"
+    "@deepseek-ai/schemastery": "^3.18.1",
+    "@huggingface/transformers": "^4.3.2"
   },
   "peerDependenciesMeta": {
     "@deepseek-ai/dsh-llm": {
       "optional": true
+    },
+    "@huggingface/transformers": {
+      "optional": true,
+      "note": "optional peer 不会被自动安装：装了才拉 onnxruntime-node（287MB、含平台二进制）；不装时纯 BM25 运行（embed.mjs 已懒加载并降级）"
     }
-  },
-  "optionalDependencies": {
-    "@huggingface/transformers": "^4.3.2"
   },
   "dsh": {
     "bundle": {

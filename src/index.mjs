@@ -95,7 +95,7 @@ export async function apply(ctx, rawConfig) {
     try {
       const { createEmbedder } = await import('./embed.mjs');
       embedder = await createEmbedder(cfg, ctx.logger);
-      ctx.logger?.info?.(`meow-mind: embedding 就绪（${cfg.embedding.model} ${cfg.embedding.dtype}）`);
+      ctx.logger?.info?.(`meow-mind: embedding 已启用（${cfg.embedding.model} ${cfg.embedding.dtype}；懒加载，首次检索才载模型）`);
     } catch (e) {
       ctx.logger?.warn?.(`meow-mind: embedding 不可用，降级纯 BM25（${e instanceof Error ? e.message : String(e)}）`);
       embedder = null;

@@ -1103,6 +1103,22 @@ s = s.replace(URL, (u) => { const m = /^https?:\/\/([^/?#]+)/.exec(u); return m 
 
 **验真（2026-11-23 23:59，完全退出宿主重启后）**：同一会话调 `memory_mail list`，返回体 `code` 字段为 `LD-3F004438-01D5`（重启前同一调用返回 `MT-3F004438-01D5`），热重读在运行版生效。库状态与重启前逐项一致（541 条 / schema 5 / `integrity: true` / 22 个 `memory_*` 工具 / 首轮块 2,327 tokens），说明这轮只动了码表逻辑。重启前发出的那封信 `from` 仍为 `MT-…`——已写入的信件不回溯改写，属正常历史痕迹。
 
+### 13.38 依赖瘦身 + 兄弟记忆检测 + embedding 降级修正（2026-11-24）
+
+**起因**：`@huggingface/transformers` 原在 `optionalDependencies`，pnpm 会照装，连带拉 `onnxruntime-node@1.30.0`（287.7 MB，含各平台二进制）。`dsh plugin why onnxruntime-node` 的链路是 `meow-mind → @huggingface/transformers@4.3.2 → onnxruntime-node@1.30.0`——此前一直误记成视频插件的依赖，2026-11-24 卸载 video-understand 时才查清。
+
+**改法一（`package.json`）**：`@huggingface/transformers` 从 `optionalDependencies` 移到 `peerDependencies`，标 `peerDependenciesMeta.optional = true`。optional peer 不被 pnpm 自动安装，新装机器不拉那 287 MB；本机已装的不受影响（改声明不删文件）。`peerDependenciesMeta` 里的 `note` 是非标准字段（npm/pnpm 忽略，只作文档）。
+
+**改法二（`embed.mjs`）**：文件头注释一直写「缺失/断网一律返回 null 由上层降级」，实现却是 `catch { throw e }`。改成失败返回 `null` 并置模块级 `failed`——不装包时第一次检索失败即永久降级纯 BM25，不再每条消息重试、不再每轮抛一个异常被吞掉。配套把 `index.mjs` 启动日志由「embedding 就绪」改成「已启用（懒加载，首次检索才载模型）」：`createEmbedder` 只建 api 对象、不载模型，原文案是假的。
+
+**改法三（`inject.mjs`）**：新增 `detectSiblingMemory()`，检测**当前 profile** 是否还装着 `meow-memory`——另一作者的同类插件（npm `meow-memory@0.33.3`，仓库 `Phant0Meow/dsh-meow-memory`，描述与本插件高度重合）。两者注册同名 `memory_*` 工具，同一 profile 下后加载的会把先加载的顶掉。检出时首轮块加一段「## 环境警告」，按注入预算决定是否省略（省略时记入 `dropped`）。
+
+**为什么只查 `DSH_PROFILE_DIR`**：初版遍历 `$DSH_HOME/profiles/*` 全部 profile，只要任一装了 meow-memory 就报警；将来 `web` / `headless` 装了会让 `desktop` 会话误报。插件进程里 `DSH_PROFILE_DIR` 直接可用（本机 `C:\Users\ZQY\.dsh\profiles\desktop`），比遍历精确，也不用猜 profile 名。
+
+**验收**：`detectSiblingMemory` 8 项断言全过（无 `DSH_PROFILE_DIR` / 目录不在 / 无 `package.json` / 只装 meow-mind / 装了 meow-memory 检出 0.33.3 / `DSH_PROFILE` 优先作文本名 / **别的 profile 装了不误报** / 坏 JSON 不抛）；smoke / whitebox / command / discipline 四套 `exit=0`。
+
+**当前本机状态**：`profiles/*/package.json` 里只有 `desktop` 装 `meow-mind`（`file:`），没有 `meow-memory`，所以这段检测目前是空转的防御代码。
+
 ## 14. 测试环境桩（2026-11-21）
 
 源码目录为省 464 MB 删过 `node_modules`，而 `src/index.mjs` 的注入链路依赖宿主的 `@deepseek-ai/dsh-llm`：

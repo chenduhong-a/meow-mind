@@ -13,9 +13,13 @@ const ONNX_THREADS = 4;
 
 let extractor = null;
 let loading = null;
+// 加载失败一次就别每条消息重试：包没装时 import 会稳定失败，
+// 重试只会让每次检索都抛一个异常再被上层吞掉。装好包后重启插件即可。
+let failed = false;
 
 async function load(cfg, logger) {
   if (extractor !== null) return extractor;
+  if (failed) return null;
   if (loading !== null) return loading;
   loading = (async () => {
     try { os.setPriority(0, 10); } catch { /* 权限不足时忽略，不影响功能 */ }
@@ -42,7 +46,9 @@ async function load(cfg, logger) {
     return await loading;
   } catch (e) {
     loading = null;
-    throw e;
+    failed = true;
+    logger?.warn?.(`meow-mind: embedding 加载失败，本次运行降级纯 BM25（${e instanceof Error ? e.message : String(e)}）`);
+    return null;
   }
 }
 
