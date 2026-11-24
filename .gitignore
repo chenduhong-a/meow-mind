@@ -1,0 +1,12 @@
+# 依赖与模型：体积大、可重装
+node_modules/
+models/
+
+# 测试夹具是真实记忆的导出（含个人内容），不进仓库；
+# 需要时从本地库重新生成，别把真实数据提交上来
+test/fixtures-memories.json
+
+# 运行时产物
+*.log
+.dsh-mind/
+_dsh/

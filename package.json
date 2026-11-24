@@ -1,0 +1,59 @@
+{
+  "name": "meow-mind",
+  "version": "0.1.0",
+  "author": "ZQY · LD-BA49BC34-894F",
+  "description": "DSH 跨会话记忆：事件溯源 + 六级状态机 + BM25/embedding 混合检索，单文件 SQLite，零外部服务。",
+  "type": "module",
+  "main": "src/index.mjs",
+  "exports": {
+    ".": "./src/index.mjs",
+    "./client": "./client.js"
+  },
+  "files": [
+    "src",
+    "models",
+    "cordis.patch.yml",
+    "README.md",
+    "SPEC.md",
+    "client.js"
+  ],
+  "engines": {
+    "node": ">=22.5"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-llm": "*",
+    "@deepseek-ai/schemastery": "^3.18.1"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-llm": {
+      "optional": true
+    }
+  },
+  "optionalDependencies": {
+    "@huggingface/transformers": "^4.3.2"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true
+    }
+  },
+  "scripts": {
+    "check": "node --check src/index.mjs"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "memory",
+    "sqlite",
+    "bm25",
+    "embedding"
+  ],
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@deepseek-ai/schemastery": "3.18.5"
+  }
+}

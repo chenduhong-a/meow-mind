@@ -1,0 +1,177 @@
+[
+  {
+    "type": "A",
+    "q": "selfcheck.mjs 在哪个技能里、怎么用",
+    "expect": [
+      "0mvgksi7s",
+      "0mw7swgxs"
+    ]
+  },
+  {
+    "type": "A",
+    "q": "univer-office 的 peer 依赖版本线",
+    "expect": [
+      "0mvpdqcxg"
+    ]
+  },
+  {
+    "type": "A",
+    "q": "billion-context 的 dist-tags 怎么认",
+    "expect": [
+      "0mw78ik6m"
+    ]
+  },
+  {
+    "type": "A",
+    "q": "dsh.profile.bundles reconcile 分几套",
+    "expect": [
+      "0mtpej5m6"
+    ]
+  },
+  {
+    "type": "A",
+    "q": "sci-venv 里装了什么、怎么用",
+    "expect": [
+      "0mvpe6xpv"
+    ]
+  },
+  {
+    "type": "A",
+    "q": "bili-vision 的 inspect 参数有哪些",
+    "expect": [
+      "0mw8u031t"
+    ]
+  },
+  {
+    "type": "A",
+    "q": "B站视频文案定调该用哪个技能",
+    "expect": [
+      "0mvfie87e"
+    ]
+  },
+  {
+    "type": "A",
+    "q": "dsh-raw-html-v2 目录里有哪些文件",
+    "expect": [
+      "0mtvkkwse",
+      "0mvuk4qgo"
+    ]
+  },
+  {
+    "type": "B",
+    "q": "课件里的公式怎么提取出来",
+    "expect": [
+      "0mviicv7z",
+      "0mw9chckm"
+    ]
+  },
+  {
+    "type": "B",
+    "q": "装之前怎么判断一个插件能不能装",
+    "expect": [
+      "0mtpg01qh",
+      "0mvffr1zf"
+    ]
+  },
+  {
+    "type": "B",
+    "q": "两个会话之间怎么互相传话",
+    "expect": [
+      "0mvm33g01"
+    ]
+  },
+  {
+    "type": "B",
+    "q": "程序一导入就崩，怀疑运行库被覆盖了",
+    "expect": [
+      "0mw8wxjh5"
+    ]
+  },
+  {
+    "type": "B",
+    "q": "帮我挑东西的时候应该注意什么",
+    "expect": [
+      "0mw8y1egp"
+    ]
+  },
+  {
+    "type": "B",
+    "q": "记忆库放在哪个目录、怎么维护",
+    "expect": [
+      "0mw4te8v4"
+    ]
+  },
+  {
+    "type": "B",
+    "q": "在外面连不上家里的电脑",
+    "expect": [
+      "0mw0k25kr"
+    ]
+  },
+  {
+    "type": "B",
+    "q": "我多高多重、衣服按什么标准推荐",
+    "expect": [
+      "0mvd82vb6"
+    ]
+  },
+  {
+    "type": "C",
+    "q": "想给 PPT 加公式，用哪个工具链",
+    "expect": [
+      "0mvpdqcxg",
+      "0mviicv7z"
+    ]
+  },
+  {
+    "type": "C",
+    "q": "以前装过某个东西之后工具全没了，怎么修",
+    "expect": [
+      "0mwehqvnj",
+      "0mvujrezw"
+    ]
+  },
+  {
+    "type": "C",
+    "q": "我这边的毕业学分和论文要求",
+    "expect": [
+      "0mw1bacoc"
+    ]
+  },
+  {
+    "type": "C",
+    "q": "怎么让技能换台机器也能用",
+    "expect": [
+      "0mwm56tzl"
+    ]
+  },
+  {
+    "type": "C",
+    "q": "B站视频怎么读",
+    "expect": [
+      "0mvg6y6ne"
+    ]
+  },
+  {
+    "type": "C",
+    "q": "改完插件包之后还要做什么",
+    "expect": [
+      "0mwmbcr8q",
+      "0mvpcsw4m"
+    ]
+  },
+  {
+    "type": "C",
+    "q": "什么是 Agent 预设",
+    "expect": [
+      "0mtpho3ev"
+    ]
+  },
+  {
+    "type": "C",
+    "q": "哪个会话负责只写规划不干活",
+    "expect": [
+      "0mwomh2a8"
+    ]
+  }
+]
