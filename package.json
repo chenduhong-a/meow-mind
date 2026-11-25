@@ -1,6 +1,6 @@
 {
   "name": "meow-mind",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "ZQY-LD",
   "description": "DSH 跨会话记忆：事件溯源 + 六级状态机 + BM25/embedding 混合检索，单文件 SQLite，零外部服务。",
   "type": "module",

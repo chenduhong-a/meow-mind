@@ -82,7 +82,10 @@ export function parseInbox(dir) {
   // 而 `\r` 会让 header 正则的 `$` 匹配失败，整封信被静默丢弃。
   const text = readInbox(dir).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
   if (!text.trim()) return [];
-  const parts = text.split(/^## /m).slice(1);
+  // 只按「合法信头」切分。正文里可能有 `## 一、…` 这类小标题，
+  // 早先按 /^## / 裸切会把正文截断在第一个小标题处，后半段被当成无信头段塞进 skipped，
+  // 于是 memory_mail read 只回第一段（2026-11-26 LB 线实测踩到：inbox.md 里内容其实完整）。
+  const parts = text.split(/^## (?=\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}\s·\s)/m).slice(1);
   const out = [];
   // 解析不了的段不能丢：归档会重写整份 inbox，丢了就永久消失（2026-11-22 审计发现）
   Object.defineProperty(out, 'skipped', { value: [], enumerable: false });
